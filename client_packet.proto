@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+import "shared.proto";
+
+package sodibus;
+option go_package = "packet";
+option java_package = "systems.magi.sodibus.packet";
+
+// initialization packet
+//
+// client will send a Init once connection established.
+// client has to declare it's type, either a 'producer', who sends invocations, or a 'consumer', who execute invocations and returns values.
+message PacketInitialization {
+  ClientType type           = 1; // 'type' of this client
+  repeated string provides  = 2; // 'consumer' must declare services it provides
+}
+
+// invocation packet
+//
+// producer client send invocation packet when it wants to invoke a service
+message PacketProducerSend {
+  uint64 id             = 1; // client generated id for this invocation
+  Invocation invocation = 2; // invocation
+}
+
+// invocation result packet
+//
+// producer client send receives result packet when invocation finished
+message PacketProducerRecv {
+  uint64 id       = 1; // previously generated id
+  ErrorCode code  = 2; // invocation error code, biz logic should be handled by 'result'
+  string result   = 3; // invocation result
+}
+
+// invocation recieved by Consumer
+message PacketConsumerRecv {
+  FullId id             = 1; // FullId to locate the producer
+  Invocation invocation = 2; // invocation
+}
+
+// invocation result sent by Consumer
+message PacketConsumerSend {
+  FullId id       = 1; // FullId to locate the producer
+  string result   = 2; // invocation result
+}

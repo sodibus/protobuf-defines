@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package sodibus;
+option go_package = "packet";
+option java_package = "systems.magi.sodibus.packet";
+
+// enumerations for client types
+enum ClientType {
+  PRODUCER = 0;
+  CONSUMER = 1;
+}
+
+// enumerations for errors
+enum ErrorCode {
+  OK                    = 0;
+  // client-node error 1xxx
+  CONN_FAILED           = 1001; // network error
+  // cluster error 2xxx
+  CLUSTER_CONN_FAILED   = 2001; // inter-cluster network error
+  // logic error 3xxx
+  NO_CONSUMER           = 3001; // no consumer is registered with provided service_name
+  // unknown error
+  UNKNOWN               = 9999;
+}
+
+// Full-ID
+message FullId {
+  uint64 id         = 1; // client-local invocation id
+  uint64 node_id    = 2; // id of SODIBus node
+  uint64 client_id  = 3; // id of client in a SODIBus
+}
+
+// Invocation
+message Invocation {
+  string service_name   = 1; // name of service to invoke
+  string arguments      = 2; // invocation arguments
+  bool no_return        = 3; // whether return value should be ignored
+}
+
