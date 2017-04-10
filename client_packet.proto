@@ -9,37 +9,46 @@ option java_package = "systems.magi.sodibus.packet";
 // initialization packet
 //
 // client will send a Init once connection established.
-// client has to declare it's type, either a 'producer', who sends invocations, or a 'consumer', who execute invocations and returns values.
+// client has to declare it's type, either a 'caller', who sends invocations, or a 'callee', who execute invocations and returns values.
 message PacketInitialization {
   ClientType type           = 1; // 'type' of this client
-  repeated string provides  = 2; // 'consumer' must declare services it provides
+  repeated string provides  = 2; // 'callee' must declare services it provides
+}
+
+// ready packet
+//
+// SODIBus will send a PacketReady after initialization ready
+message PacketReady {
+  ClientType type   = 1;
+  uint64 node_id    = 2;
+  uint64 client_id  = 3;
 }
 
 // invocation packet
 //
-// producer client send invocation packet when it wants to invoke a service
-message PacketProducerSend {
-  uint64 id             = 1; // client generated id for this invocation
+// caller client send invocation packet when it wants to invoke a service
+message PacketCallerSend {
+  uint64 id             = 1; // client-local unique id for this invocation
   Invocation invocation = 2; // invocation
 }
 
 // invocation result packet
 //
-// producer client send receives result packet when invocation finished
-message PacketProducerRecv {
+// caller client send receives result packet when invocation finished
+message PacketCallerRecv {
   uint64 id       = 1; // previously generated id
-  ErrorCode code  = 2; // invocation error code, biz logic should be handled by 'result'
+  ErrorCode code  = 2; // SODIBus error code, biz logic should be handled by 'result'
   string result   = 3; // invocation result
 }
 
-// invocation recieved by Consumer
-message PacketConsumerRecv {
-  FullId id             = 1; // FullId to locate the producer
+// invocation recieved by Callee
+message PacketCalleeRecv {
+  InvocationId id       = 1; // InvocationId to locate the invocation
   Invocation invocation = 2; // invocation
 }
 
-// invocation result sent by Consumer
-message PacketConsumerSend {
-  FullId id       = 1; // FullId to locate the producer
+// invocation result sent by Callee
+message PacketCalleeSend {
+  InvocationId id = 1; // InvocationId to locate the invocation
   string result   = 2; // invocation result
 }
