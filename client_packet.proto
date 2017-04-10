@@ -9,9 +9,9 @@ option java_package = "systems.magi.sodibus.packet";
 // initialization packet
 //
 // client will send a Init once connection established.
-// client has to declare it's type, either a 'caller', who sends invocations, or a 'callee', who execute invocations and returns values.
+// client has to declare it's mode, either a 'caller', who sends invocations, or a 'callee', who execute invocations and returns values.
 message PacketInitialization {
-  ClientType type           = 1; // 'type' of this client
+  ClientMode mode           = 1; // 'mode' of this client
   repeated string provides  = 2; // 'callee' must declare services it provides
 }
 
@@ -19,7 +19,7 @@ message PacketInitialization {
 //
 // SODIBus will send a PacketReady after initialization ready
 message PacketReady {
-  ClientType type   = 1;
+  ClientMode mode   = 1;
   uint64 node_id    = 2;
   uint64 client_id  = 3;
 }
