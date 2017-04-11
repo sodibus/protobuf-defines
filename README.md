@@ -18,7 +18,7 @@ SODIBus uses Protobuf as messaging format, but Protobuf is not self-delimiting, 
 
 # Packet Type
 
-* 1 = Initialization
+* 1 = Handshake
 
 * 2 = Ready
 

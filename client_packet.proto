@@ -6,18 +6,18 @@ package sodibus;
 option go_package = "packet";
 option java_package = "systems.magi.sodibus.packet";
 
-// initialization packet
+// handshake packet
 //
 // client will send a Init once connection established.
 // client has to declare it's mode, either a 'caller', who sends invocations, or a 'callee', who execute invocations and returns values.
-message PacketInitialization {
+message PacketHandshake {
   ClientMode mode           = 1; // 'mode' of this client
   repeated string provides  = 2; // 'callee' must declare services it provides
 }
 
 // ready packet
 //
-// SODIBus will send a PacketReady after initialization ready
+// SODIBus will send a PacketReady after handshake ready
 message PacketReady {
   ClientMode mode   = 1;
   uint64 node_id    = 2;
