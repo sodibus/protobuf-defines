@@ -30,6 +30,12 @@ message InvocationId {
   uint64 id         = 3; // client-local invocation id
 }
 
+// CalleeId
+message CalleeId {
+  uint64 node_id    = 1;
+  uint64 client_id  = 2;
+}
+
 // Invocation
 message Invocation {
   string callee_name        = 1; // name of callee to invoke

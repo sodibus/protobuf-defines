@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+import "shared.proto";
+
+package sodibus;
+option go_package = "packet";
+option java_package = "systems.magi.sodibus.packet";
+
+// Broadcast - Node Online
+
+message ClusterPacketNodeInfo {
+  // uinque uint64 id
+  uint64 node_id = 1;
+  // unique ip:port address of node cluster port
+  string node_addr = 2;
+  // whether this message is forwarded from other node
+  bool is_forwarded = 3;
+}
+
+message ClusterPacketNodeInfoBatch {
+  repeated ClusterPacketNodeInfo nodes = 1;
+}
+
+// Broadcast - Callee Changed
+
+message ClusterPacketCalleeInfo {
+  CalleeId id               = 1;
+  repeated string provides  = 2;
+}
+
+message ClusterPacketCalleeInfoBatch {
+  repeated ClusterPacketCalleeInfo callees = 1;
+}
+
+message ClusterPacketCalleeRemove {
+  CalleeId id               = 1;
+}
+
+// Point-to-Point - Invocation
+
+message ClusterPacketInvocation {
+  InvocationId id       = 1;
+  Invocation invocation = 2;
+}
+
+// Point-to-Point - Invocation Result
+
+message ClusterPacketResult {
+  InvocationId id = 1;
+  ErrorCode code  = 2; // SODIBus error code, biz logic should be handled by 'result'
+  string result   = 3; // invocation result
+}
+
